@@ -1,13 +1,24 @@
-const express = require('express')
-const routes = require('@util/routes')
-const errorMiddleware = require('@middleware/errorMiddleware')
+require('dotenv').config();
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+const routes = require('@util/routes');
+const { MONGODB_URI } = require('@util/common');
+const errorMiddleware = require('@middleware/errorMiddleware');
 
-const app = express()
+mongoose
+  .connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then((result) => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => {
+    console.log('Error connecting to MongoDB', error.message);
+  });
 
-app.use(express.json())
+app.use(express.json());
 
-app.use(routes)
+app.use(routes);
 
-app.use(errorMiddleware)
+app.use(errorMiddleware);
 
-module.exports = app
+module.exports = app;

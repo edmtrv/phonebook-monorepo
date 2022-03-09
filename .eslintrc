@@ -1,14 +1,14 @@
 {
-  "extends": "airbnb",
+  "extends": ["airbnb", "prettier"],
   "parser": "babel-eslint",
   "env": {
-    "browser": true
+    "browser": true,
+    "node": true,
+    "jest": true,
+    "es2021": true
   },
   "rules": {
-    "semi": [
-      "error",
-      "never"
-    ],
+    "semi": ["error", "always"],
     "max-len": [1, 200],
     "no-shadow": 0,
     "no-plusplus": 0,

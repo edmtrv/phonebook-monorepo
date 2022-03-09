@@ -1,12 +1,16 @@
 const errorHandler = (error, req, res, next) => {
-  console.error(error.message, error.name, error.extra)
+  console.error(error.message, error.name);
 
   if (error.name === 'ApplicationError') {
-    return res.status(error.status).send({ error: error.message })
+    return res.status(500).send({ error: error.message });
   }
 
-  res.status(500).send({ error: error.message })
-  return next(error)
-}
+  if (error.name === 'ValidationError') {
+    return res.status(400).send({ error: error.message });
+  }
 
-module.exports = errorHandler
+  res.status(500).send({ error: error.message });
+  return next(error);
+};
+
+module.exports = errorHandler;

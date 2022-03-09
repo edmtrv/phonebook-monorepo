@@ -1,17 +1,27 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "ES2021",
     "allowSyntheticDefaultImports": false,
     "baseUrl": "./",
     "paths": {
+      "@models/*": ["server/models/*"],
       "@controllers/*": ["server/controllers/*"],
       "@middleware/*": ["server/middleware/*"],
       "@util/*": ["server/util/*"],
       "Utilities/*": ["client/util/*"],
       "Components/*": ["client/components/*"],
       "Assets/*": ["client/assets/*"],
-      "@root/*": ["*"],
+      "@root/*": ["*"]
     }
   },
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules/", "dist"],
+  "typeAcquisition": {
+    "exclude": [
+      "dotenv",
+      "agent-base",
+      "defer-to-connect",
+      "fast-safe-stringify",
+      "https-proxy-agent"
+    ]
+  }
 }
