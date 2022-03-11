@@ -8,7 +8,7 @@ const errorMiddleware = require('@middleware/errorMiddleware');
 
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then((result) => {
+  .then(() => {
     console.log('Connected to MongoDB');
   })
   .catch((error) => {

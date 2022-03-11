@@ -27,7 +27,7 @@ const getOne = async (req, res) => {
   }
 };
 
-const create = async (req, res, next) => {
+const create = async (req, res) => {
   const contact = new Contact(req.body);
 
   const newContact = await contact.save();

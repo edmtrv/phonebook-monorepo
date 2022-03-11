@@ -4,6 +4,7 @@ const contacts = require('@controllers/contactsController');
 const router = Router();
 
 if (process.env.NODE_ENV === 'test') {
+  // eslint-disable-next-line global-require
   const testing = require('@controllers/testingController');
   router.post('/testing/reset', testing.reset);
 }

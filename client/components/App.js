@@ -21,20 +21,17 @@ const App = () => {
   const onNumberChange = (e) => setNewNumber(e.target.value);
   const onTermChange = (e) => setNewTerm(e.target.value);
 
-  const onNewData = () => {
-    if (checkContactExists(newName)) {
-      updateContact();
-    } else {
-      addContact();
-    }
-
-    setNewName('');
-    setNewNumber('');
+  const showNotification = (message, type = 'success') => {
+    setMessage(message);
+    setType(type);
+    setTimeout(() => {
+      setMessage(null);
+      setType('');
+    }, 5000);
   };
 
   const addContact = () => {
     const newContact = { name: newName, number: newNumber };
-    console.log(newContact);
     phonebook
       .create(newContact)
       .then((data) => {
@@ -48,6 +45,7 @@ const App = () => {
 
   const updateContact = () => {
     if (
+      // eslint-disable-next-line no-alert
       window.confirm(
         `${newName} is already added to the phonebook. Replace the old number with a new one?`
       )
@@ -71,6 +69,7 @@ const App = () => {
   };
 
   const deleteContact = (id, name) => {
+    // eslint-disable-next-line no-alert
     if (window.confirm(`Delete ${name}?`)) {
       phonebook.deletePerson(id).then(() => {
         setContacts(contacts.filter((p) => p.id !== id));
@@ -78,23 +77,23 @@ const App = () => {
     }
   };
 
-  const checkContactExists = (input) => {
-    return contacts.some((contact) => contact.name === input);
-  };
+  const checkContactExists = (input) =>
+    contacts.some((contact) => contact.name === input);
 
-  const filterPhonebook = () => {
-    return contacts.filter((contact) =>
+  const filterPhonebook = () =>
+    contacts.filter((contact) =>
       contact.name.toLowerCase().includes(newTerm.toLowerCase())
     );
-  };
 
-  const showNotification = (message, type = 'success') => {
-    setMessage(message);
-    setType(type);
-    setTimeout(() => {
-      setMessage(null);
-      setType('');
-    }, 5000);
+  const onNewData = () => {
+    if (checkContactExists(newName)) {
+      updateContact();
+    } else {
+      addContact();
+    }
+
+    setNewName('');
+    setNewNumber('');
   };
 
   return (
