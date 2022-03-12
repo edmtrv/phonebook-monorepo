@@ -17,3 +17,11 @@ jobs:
         run: npm install
       - name: lint
         run: npm run lint
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: 'phonebook-monorepo'
+          heroku_email: 'edimitrov1@gmail.com'
+          healthcheck: 'https://phonebook-monorepo.herokuapp.com/api/health'
+          checkstring: 'ok'
+          rollbackonhealthcheckfailed: true

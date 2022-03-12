@@ -9,6 +9,10 @@ if (process.env.NODE_ENV === 'test') {
   router.post('/testing/reset', testing.reset);
 }
 
+router.get('/health', (req, res) => {
+  res.send('ok');
+});
+
 router.get('/contacts', contacts.getAll);
 router.post('/contacts', contacts.create);
 router.get('/contacts/:id', contacts.getOne);
