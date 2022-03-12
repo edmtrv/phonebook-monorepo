@@ -14,9 +14,9 @@
     "test:e2e": "cypress run"
   },
   "engines": {
-    "node": ">=14"
+    "node": "16"
   },
-  "author": "Jami Kousa",
+  "author": "Emil",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.8.3",
