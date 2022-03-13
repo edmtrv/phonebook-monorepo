@@ -13,13 +13,10 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - name: create env file
-        run: |
-          touch .env
-          echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
-          echo TEST_MONGODB_URI=${{ secrets.TEST_MONGODB_URI }} >> .env
-          cat .env
       - uses: actions/setup-node@v2
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
         with:
           node-version: '14'
       - name: npm install
