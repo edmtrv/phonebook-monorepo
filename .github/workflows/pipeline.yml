@@ -19,7 +19,8 @@ jobs:
       - name: create env file
         run: |
           touch .env
-          echo MONGODB_URI=${{ secrets.MONGODB_URI }} > .env
+          echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
+          echo TEST_MONGODB_URI=${{ secrets.TEST_MONGODB_URI }} >> .env
           cat .env
       - name: npm install
         run: npm install
@@ -33,7 +34,7 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           command: npm run test:e2e
-          start: npm run start
+          start: npm run start:test
           wait-on: http://localhost:8000
       - name: deploy
         uses: akhileshns/heroku-deploy@v3.12.12
