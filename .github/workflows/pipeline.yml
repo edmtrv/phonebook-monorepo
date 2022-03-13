@@ -20,8 +20,25 @@ jobs:
         run: npm install
       - name: lint
         run: npm run lint
-      - uses: akhileshns/heroku-deploy@v3.12.12
-        if: ${{ github.event_name == 'push' }}
+      - name: build
+        run: npm run build
+      - name: test
+        run: npm run test
+        env:
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+
+      - name: e2e tests
+        uses: cypress-io/github-action@v2
+        env:
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+
+        with:
+          command: npm run test:e2e
+          start: npm run start:test
+          wait-on: http://localhost:8000
+      - name: deploy
+        uses: akhileshns/heroku-deploy@v3.12.12
+        if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: 'phonebook-monorepo'
@@ -34,7 +51,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: bump version and push tag
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
         uses: anothrNick/github-tag-action@1.36.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

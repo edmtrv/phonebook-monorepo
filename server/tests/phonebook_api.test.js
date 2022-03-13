@@ -9,10 +9,10 @@ const api = supertest(app);
 beforeEach(async () => {
   await Contact.deleteMany({});
 
-  const contactObjects = helper.initialContacts.map((p) => new Contact(p));
+  const contactObjects = helper.initialContacts.map((c) => new Contact(c));
   const promiseArray = contactObjects.map((c) => c.save());
   await Promise.all(promiseArray);
-});
+}, 10000);
 
 describe('when there is initially some contacts saved', () => {
   test('contacts are returned as json', async () => {

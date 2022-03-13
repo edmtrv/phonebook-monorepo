@@ -12,6 +12,7 @@ mongoose
     console.log('Connected to MongoDB');
   })
   .catch((error) => {
+    console.log(process.env);
     console.log('Error connecting to MongoDB', error.message);
   });
 

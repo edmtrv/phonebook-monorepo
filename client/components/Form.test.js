@@ -25,7 +25,6 @@ describe('when a Form component is loaded', () => {
     userEvent.type(screen.getByLabelText(/number/i), number);
     userEvent.click(screen.getByRole('button', { name: /add/i }));
 
-    screen.debug();
     expect(handleNewData).toHaveBeenCalledTimes(1);
   });
 });
