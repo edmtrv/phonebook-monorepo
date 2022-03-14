@@ -46,28 +46,7 @@ jobs:
           healthcheck: 'https://phonebook-monorepo.herokuapp.com/api/health'
           checkstring: 'ok'
           rollbackonhealthcheckfailed: true
-      # - name: deployment success
-      #   uses: rjstone/discord-webhook-notify@v1
-      #   if: ${{ success() && github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
-      #   with:
-      #     severity: info
-      #     username: ${{ github.repository }}
-      #     text: A new version has been successfully deployed
-      #     description: to https://phonebook-monorepo.herokuapp.com/
-      #     details: commit message - ${{ github.event.head_commit.message }}
-      #     footer: by ${{ github.event.commiter.name }}
-      #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      # - name: build failure
-      #   uses: rjstone/discord-webhook-notify@v1
-      #   if: ${{ failure() }}
-      #   with:
-      #     severity: error
-      #     username: ${{ github.repository }}
-      #     text: The build has failed
-      #     description: on commit ${{ github.event.head_commit.url }}
-      #     details: commit message - ${{ github.event.head_commit.message }}
-      #     footer: by ${{ github.event.commiter.name }}
-      #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
@@ -78,3 +57,50 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: 'patch'
+
+  notifications:
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: deployment success
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ success() && github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
+        with:
+          severity: info
+          username: ${{ github.repository }}
+          text: A new version has been successfully deployed
+          description: to https://phonebook-monorepo.herokuapp.com/
+          details: commit message - ${{ github.event.head_commit.message }}
+          footer: by ${{ github.event.commiter.name }}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: build failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ failure() && github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
+        with:
+          severity: error
+          username: ${{ github.repository }}
+          text: The build has failed
+          description: on commit ${{ github.event.head_commit.url }}
+          details: commit message - ${{ github.event.head_commit.message }}
+          footer: by ${{ github.event.commiter.name }}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: merge possible
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ success() && github.event_name == 'pull_request' }}
+        with:
+          severity: info
+          username: ${{ github.repository }}
+          text: Merge possible - ${{ github.event.pull_request.title }}
+          description: ${{ github.event.pull_request.body }}
+          details: ${{ github.event.pull_request.html_url }}
+          footer: by ${{ github.event.pull_request.user.login}}
+      - name: merge failed
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ failure() && github.event_name == 'pull_request' }}
+        with:
+          severity: error
+          username: ${{ github.repository }}
+          text: FAILURE - ${{ github.event.pull_request.title }}
+          description: ${{ github.event.pull_request.body }}
+          details: ${{ github.event.pull_request.html_url }}
+          footer: by ${{ github.event.pull_request.user.login}}
