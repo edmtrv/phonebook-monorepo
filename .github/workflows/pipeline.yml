@@ -94,6 +94,7 @@ jobs:
           description: ${{ github.event.pull_request.body }}
           details: ${{ github.event.pull_request.html_url }}
           footer: by ${{ github.event.pull_request.user.login}}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: merge failed
         uses: rjstone/discord-webhook-notify@v1
         if: ${{ failure() && github.event_name == 'pull_request' }}
@@ -104,3 +105,4 @@ jobs:
           description: ${{ github.event.pull_request.body }}
           details: ${{ github.event.pull_request.html_url }}
           footer: by ${{ github.event.pull_request.user.login}}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
